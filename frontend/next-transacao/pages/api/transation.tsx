@@ -25,7 +25,14 @@ export default function Home() {
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setType(e.target.value as 'credit' | 'debit');
   };
-
+  const formatCurrency = (value: string | number) => {
+    if (typeof value === 'number') {
+      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    } else {
+      return ''; // Retorna uma string vazia se o valor não for numérico
+    }
+  };
+  
   const postDataToBackend = async () => {
     const data: TransactionData = {
       idempotencyId: generateIdempotencyId(), // Gerando um idempotencyId automático
@@ -43,27 +50,34 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <form>
-        <label htmlFor="amount">Amount:</label>
+    <div className="max-w-lg mx-auto mt-10">
+       <div className="bg-white p-6 shadow-md rounded-lg">
+      <h2 className="text-xl font-bold mb-4">Transação</h2>
+      <form className="space-y-4">
+        <label htmlFor="amount">Valor:</label>
         <input
           type="number"
           id="amount"
           value={amount}
           onChange={handleAmountChange}
+          className="w-full border border-gray-300 rounded px-4 py-2"
         />
         <br />
-        <label htmlFor="type">Type:</label>
-        <select id="type" value={type} onChange={handleTypeChange}>
+        <label htmlFor="type">Tipo:</label>
+        <select id="type" value={type} onChange={handleTypeChange} className="w-full border border-gray-300 rounded px-4 py-2">
           <option value="credit">Credit</option>
           <option value="debit">Debit</option>
         </select>
         <br />
-        <button type="button" onClick={postDataToBackend}>
+        <button type="button" onClick={postDataToBackend} className="bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2">
           Send Data to Backend
         </button>
       </form>
-      <p>{message}</p>
+      <p className={`mt-4 ${message.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+        {message}
+      </p>
+      <p className="text-gray-700 mt-2">Valor: {formatCurrency(amount)}</p>
+      </div>
     </div>
   );
 }
