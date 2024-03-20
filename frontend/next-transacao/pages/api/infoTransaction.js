@@ -6,16 +6,14 @@ export default async function handler(req, res) {
 
   const params = {
     QueueUrl: 'https://sqs.us-east-1.amazonaws.com/471112524757/payloadAWS',
-    MaxNumberOfMessages: 100,
+    MaxNumberOfMessages: 10,
        
   };
 
   try {
     const data = await sqs.receiveMessage(params).promise();
 
-    console.log('Response from SQS:', data); // Adicione este console.log para ver a resposta do SQS no CloudWatch
-
-    if (data.Messages && Array.isArray(data.Messages)) {
+      if (data.Messages && Array.isArray(data.Messages)) {
       const messages = data.Messages.map(message => ({
         messageId: message.MessageId,
         body: JSON.parse(message.Body),

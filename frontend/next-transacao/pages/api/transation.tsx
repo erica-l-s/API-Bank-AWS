@@ -20,7 +20,7 @@ export default function Home() {
   const [message, setMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
-
+    
   const generateIdempotencyId = () => {
     return Math.floor(Math.random() * 1000000); // Gerando um idempotencyId de 0 a 999999
   };
@@ -65,7 +65,7 @@ export default function Home() {
     try {
       const response = await axios.get<ApiResponse>('http://localhost:3001/api/infoTransacoes');
       const data = response.data;
-
+  
       // Verifica se a resposta possui uma lista de mensagens válida
       if (data.Messages && Array.isArray(data.Messages)) {
         const parsedTransactions = data.Messages
@@ -73,15 +73,8 @@ export default function Home() {
           .filter((transaction: TransactionData) => {
             return transaction.idempotencyId && transaction.amount && transaction.type;
           });
-
-        // Ordena as transações pela data de recebimento (se houver um campo de data na transação)
-        parsedTransactions.sort((a: TransactionData, b: TransactionData) => {
-           return new Date(b.dataRecebimento).getTime() - new Date(a.dataRecebimento).getTime();
-        });
-
-        // Limita a exibição para as últimas 10 transações
-        const limitedTransactions = parsedTransactions.slice(0, 10);
-        setTransactions(limitedTransactions);
+  
+        setTransactions(parsedTransactions); // Define todas as transações disponíveis
       } else {
         console.error('Resposta inválida da API:', data);
       }
@@ -94,7 +87,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchTransactions();
-  }, []);
+    }, []);
 
   return (
     <div className="max-w-lg mx-auto mt-10">
@@ -150,7 +143,7 @@ export default function Home() {
           <ul className="text-black">
             {transactions.map((transaction, index) => (
               <li key={index}>
-                Idempotency ID: {transaction.idempotencyId}, Valor: {transaction.amount}, Tipo: {transaction.type}
+                ID: {transaction.idempotencyId}, Valor: {transaction.amount}, Tipo: {transaction.type}
               </li>
             ))}
           </ul>

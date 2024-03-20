@@ -1,6 +1,5 @@
 const express = require('express');
 const { SQS } = require('aws-sdk');
-const AWS = require('aws-sdk');
 
 const cors = require('cors')
 
@@ -8,22 +7,6 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 const sqs = new SQS({ region: 'us-east-1' });
-
-// Configuração das credenciais da AWS
-AWS.config.update({
-  accessKeyId: process.env.ACCESS_KEY_ID,
-  secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: 'us-east-1'
-});
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-
-
-// Rota principal
-app.get('/', (req, res) => {
-  res.send('Bem-vindo à sua aplicação!');
-});
-
-
 
 // Rota GET para recuperar dados da fila SQS
 app.get('/api/infoTransacoes', async (req, res) => {
