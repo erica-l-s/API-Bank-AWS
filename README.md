@@ -1,6 +1,11 @@
-# AWS SQS Transaction Management
 
+# AWS SQS Transaction Management
 This repository contains code snippets and a web application for managing transactions using Amazon Simple Queue Service (SQS), Node.js, Next.js, and TypeScript.
+
+## Video
+https://github.com/erica-l-s/API-Bank-AWS/assets/97070330/8fdede82-14cc-4c0a-8e6f-64e42fb927b5
+
+
 
 ## Table of Contents
 
